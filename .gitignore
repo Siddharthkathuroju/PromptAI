@@ -15,11 +15,8 @@ next.user-config.*
 node_modules/
 .next/
 .DS_Store
-<<<<<<< HEAD
 
 # Ignore environment files
-.env
+
 *.env
 .env.*
-=======
->>>>>>> a6bf01ad53570703826d1d46697afd94749af42f
