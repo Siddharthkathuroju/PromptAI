@@ -13,7 +13,14 @@ from django.urls import path
 
 from .serializers import AnalyzePlanRequestSerializer, AnalyzePlanResponseSerializer
 from .gemini_service import GeminiService
+from django.http import JsonResponse
 
+def api_root(request):
+    return JsonResponse({
+        "project": "Explain My Plan AI",
+        "status": "online",
+        "endpoints": ["/api/analyze-plan/"]
+    })
 
 def health_check(request):
     """Health check endpoint for monitoring."""

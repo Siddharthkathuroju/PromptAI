@@ -96,7 +96,15 @@ REST_FRAMEWORK = {
 }
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
+CORS_ALLOWED_ORIGINS = [
+    "https://promptaichat.vercel.app",
+    "http://localhost:3000",
+]
+
+# CSRF: Essential for allowing POST requests (like submitting a plan) from Vercel
+CSRF_TRUSTED_ORIGINS = [
+    "https://promptaichat.vercel.app",
+]
 CORS_ALLOW_CREDENTIALS = True
 
 # API Keys
