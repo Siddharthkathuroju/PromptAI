@@ -1,55 +1,31 @@
-'use client';
+'use client'
 
-import dynamic from 'next/dynamic';
-import { useState } from 'react';
-import { AnalyzePlanResult } from '@/lib/types';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { CheckCircle2, Copy, Check } from 'lucide-react';
-
-// Dynamically import jspdf to ensure it is only loaded on the client side
-const jsPDF = dynamic(() => import('jspdf').then((mod) => mod.default), { ssr: false });
+import { useState } from 'react'
+import { AnalyzePlanResult } from '@/lib/types'
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { CheckCircle2, Copy, Check } from 'lucide-react'
 
 interface ResultsDisplayProps {
-  result: AnalyzePlanResult;
+  result: AnalyzePlanResult
 }
 
 export function ResultsDisplay({ result }: ResultsDisplayProps) {
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
 
   const copyToClipboard = async (text: string, index: number) => {
-    await navigator.clipboard.writeText(text);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
-  };
+    await navigator.clipboard.writeText(text)
+    setCopiedIndex(index)
+    setTimeout(() => setCopiedIndex(null), 2000)
+  }
 
-  const exportToPDF = async () => {
-    const doc = new (await jsPDF)();
-    const content = document.getElementById('results-content'); // Assuming the content has this ID
-    if (content) {
-      doc.text(content.innerText || '', 10, 10);
-      doc.save('results.pdf');
-    } else {
-      console.error('Content not found');
-    }
-  };
-
-  const clarityColor =
-    result.clarity_score >= 80
-      ? 'text-green-600'
-      : result.clarity_score >= 60
-      ? 'text-blue-600'
-      : 'text-amber-600';
+  const clarityColor = 
+    result.clarity_score >= 80 ? 'text-green-600' :
+    result.clarity_score >= 60 ? 'text-blue-600' :
+    'text-amber-600'
 
   return (
-    <div className="w-full space-y-6 animate-in fade-in duration-300 relative">
-      <button
-        onClick={exportToPDF}
-        className="absolute top-4 right-4 btn btn-primary"
-      >
-        Export to PDF
-      </button>
-
+    <div className="w-full space-y-6 animate-in fade-in duration-300">
       {/* Original Idea */}
       <Card className="p-6 border border-border bg-card">
         <h3 className="text-lg font-semibold text-foreground mb-2">Your Idea</h3>
@@ -102,9 +78,7 @@ export function ResultsDisplay({ result }: ResultsDisplayProps) {
             <ol className="space-y-2">
               {result.structured_plan.steps.map((step, idx) => (
                 <li key={idx} className="flex gap-3">
-                  <span className="text-sm font-semibold text-primary flex-shrink-0">
-                    {idx + 1}.
-                  </span>
+                  <span className="text-sm font-semibold text-primary flex-shrink-0">{idx + 1}.</span>
                   <div>
                     <p className="font-medium text-card-foreground">{step.title}</p>
                     <p className="text-sm text-muted-foreground">{step.description}</p>
@@ -127,21 +101,40 @@ export function ResultsDisplay({ result }: ResultsDisplayProps) {
           className="mt-4"
         >
           {copiedIndex === 0 ? (
-            <>
-              <Check className="w-4 h-4 mr-2" />Copied
-            </>
+            <><Check className="w-4 h-4 mr-2" />Copied</> 
           ) : (
-            <>
-              <Copy className="w-4 h-4 mr-2" />Copy
-            </>
+            <><Copy className="w-4 h-4 mr-2" />Copy</>
           )}
         </Button>
       </Card>
 
-      <div id="results-content">
-        {/* The content to be exported */}
-        {result.original_idea}
-      </div>
+      {/* Missing Elements */}
+      {result.missing_elements.length > 0 && (
+        <Card className="p-6 border border-border bg-card">
+          <h3 className="text-lg font-semibold text-foreground mb-3">Missing Elements</h3>
+          <ul className="space-y-2">
+            {result.missing_elements.map((element, idx) => (
+              <li key={idx} className="flex items-start gap-3">
+                <span className="text-amber-600 mt-0.5">•</span>
+                <span className="text-card-foreground">{element}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Actionable Steps */}
+      <Card className="p-6 border border-border bg-card">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Actionable Next Steps</h3>
+        <ul className="space-y-3">
+          {result.actionable_steps.map((step, idx) => (
+            <li key={idx} className="flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+              <span className="text-card-foreground">{step}</span>
+            </li>
+          ))}
+        </ul>
+      </Card>
     </div>
-  );
+  )
 }

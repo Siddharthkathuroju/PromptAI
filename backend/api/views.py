@@ -1,3 +1,8 @@
+import logging
+
+# Initialize logger
+logger = logging.getLogger(__name__)
+
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -28,7 +33,10 @@ class AnalyzePlanView(APIView):
         
         if not serializer.is_valid():
             return Response(
-                {'detail': 'Invalid request', 'errors': serializer.errors},
+                {
+                    'detail': 'Invalid request',
+                    'errors': serializer.errors
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
         
@@ -38,25 +46,39 @@ class AnalyzePlanView(APIView):
             # Initialize Gemini service and analyze
             gemini_service = GeminiService()
             result = gemini_service.analyze_plan(idea)
-            
+
+            # Log the raw response
+            logger.info(f"Raw response from GeminiService: {result}")
+
             # Validate output
             output_serializer = AnalyzePlanResponseSerializer(data=result)
             if not output_serializer.is_valid():
+                logger.error(f"Response validation errors: {output_serializer.errors}")
                 return Response(
-                    {'detail': 'Error validating response', 'errors': output_serializer.errors},
+                    {
+                        'detail': 'Error validating response',
+                        'errors': output_serializer.errors,
+                        'raw_response': result  # Include raw response for debugging
+                    },
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
             
             return Response(output_serializer.validated_data, status=status.HTTP_200_OK)
         
         except ValueError as e:
+            logger.warning(f"ValueError: {str(e)}")
             return Response(
-                {'detail': str(e)},
+                {
+                    'detail': str(e)
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
+            logger.error(f"Unhandled exception: {str(e)}")
             return Response(
-                {'detail': f'An error occurred: {str(e)}'},
+                {
+                    'detail': f'An error occurred: {str(e)}'
+                },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 

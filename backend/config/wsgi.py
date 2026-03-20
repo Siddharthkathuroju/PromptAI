@@ -1,7 +1,12 @@
 """
-WSGI config for intuitive draft API.
+WSGI project for intuitive draft API.
 """
 import os
+import sys
+
+# Add the backend directory to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')

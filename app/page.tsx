@@ -96,7 +96,6 @@ export default function Home() {
 
         {/* Footer */}
         <div className="mt-12 text-center text-xs text-muted-foreground">
-          <p>Powered by AI • Built with Next.js</p>
         </div>
       </div>
     </main>

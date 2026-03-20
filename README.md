@@ -1,109 +1,90 @@
-# Intuitive Draft - AI-Powered Plan Analyzer
+# PromptAI
 
-Transform vague ideas into clear, structured plans using AI. Intuitive Draft helps you analyze ideas and generate actionable plans with clarity scoring, structured steps, and next actions.
+PromptAI is a cutting-edge application designed to analyze and structure project ideas using the power of Google Gemini AI. It provides clarity scores, structured plans, and actionable steps to help you turn your ideas into reality.
 
 ## Architecture
 
 The application consists of:
-- **Frontend**: Next.js 15 with TypeScript, Tailwind CSS, and shadcn/ui
-- **Backend**: Django REST Framework with Google Gemini AI integration
-- **API**: RESTful API for plan analysis
+- **Frontend**: Built with Next.js 15, TypeScript, Tailwind CSS, and shadcn/ui.
+- **Backend**: Powered by Django REST Framework with Google Gemini AI integration.
+- **API**: RESTful API for analyzing and structuring project plans.
 
 ## Prerequisites
 
-- Node.js 18+ 
+To run this application, ensure you have the following installed:
+- Node.js 18+
 - Python 3.10+
-- Google Gemini API Key (get one at https://ai.google.dev/)
+- Google Gemini API Key (get one at [Google AI](https://ai.google.dev/))
 
 ## Installation
 
-### 1. Frontend Setup
+### Frontend Setup
 
-```bash
-# Install dependencies
-npm install
+1. Navigate to the `app` directory and install dependencies:
+   ```bash
+   npm install
+   ```
 
-# Set up environment variables
-cp .env.example .env.local
-# Edit .env.local and set NEXT_PUBLIC_API_URL=http://localhost:8000
+2. Set up environment variables:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Edit `.env.local` and set the following:
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   ```
 
-# Run development server
-npm run dev
-```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   The frontend will be available at [http://localhost:3000](http://localhost:3000).
 
-The frontend will be available at `http://localhost:3000`
+### Backend Setup
 
-### 2. Backend Setup
+1. Navigate to the `backend` directory:
+   ```bash
+   cd backend
+   ```
 
-```bash
-cd backend
+2. Create a Python virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-# Create a Python virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-# Install dependencies
-pip install -r requirements.txt
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env` and add your Google Gemini API key:
+   ```env
+   GOOGLE_API_KEY=your_google_api_key_here
+   ```
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env and add your GOOGLE_API_KEY
+5. Run database migrations:
+   ```bash
+   python manage.py migrate
+   ```
 
-# Run migrations
-python manage.py migrate
+6. Start the backend server:
+   ```bash
+   python manage.py runserver
+   ```
+   The backend API will be available at [http://localhost:8000](http://localhost:8000).
 
-# Start the development server
-python manage.py runserver 0.0.0.0:8000
-```
+## Features
 
-The backend API will be available at `http://localhost:8000`
-
-## Configuration
-
-### Frontend Environment Variables
-
-Create `.env.local` in the project root:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
-
-### Backend Environment Variables
-
-Create `.env` in the `backend/` directory:
-
-```env
-GOOGLE_API_KEY=your_google_api_key_here
-SECRET_KEY=your-secret-key-here
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-CORS_ALLOWED_ORIGINS=http://localhost:3000
-```
-
-## Getting a Google Gemini API Key
-
-1. Go to https://ai.google.dev/
-2. Click "Get API Key"
-3. Create a new project or select an existing one
-4. Generate an API key
-5. Copy the key and add it to your `.env` file
-
-## Running the Application
-
-### Start both servers:
-
-**Terminal 1 - Frontend:**
-```bash
-npm run dev
-```
-
-**Terminal 2 - Backend:**
-```bash
-cd backend
-python manage.py runserver
-```
-
-Then open `http://localhost:3000` in your browser.
+- **Clarity Score**: Evaluate the clarity of your idea (0-100).
+- **Structured Plan**: Break down ideas into goals, methods, steps, and timelines.
+- **Missing Elements**: Identify gaps in your planning.
+- **Simplified Version**: Get a one-sentence summary of your idea.
+- **Actionable Steps**: Receive concrete next actions to take.
 
 ## API Endpoints
 
@@ -147,17 +128,9 @@ Analyze an idea and get a structured plan.
 }
 ```
 
-## Features
-
-- **Clarity Score**: Evaluate how well-defined your idea is (0-100)
-- **Structured Plan**: Break down ideas into goal, method, steps, and timeline
-- **Missing Elements**: Identify gaps in your planning
-- **Simplified Version**: Get a one-sentence summary
-- **Actionable Steps**: Get concrete next actions to take
-
 ## Project Structure
 
-```
+```plaintext
 .
 ├── app/                    # Next.js app directory
 │   ├── page.tsx           # Main page
@@ -185,19 +158,48 @@ Analyze an idea and get a structured plan.
 ## Deployment
 
 ### Frontend (Vercel)
-```bash
-npm run build
-npm run start
-```
+
+1. Build the frontend:
+   ```bash
+   npm run build
+   ```
+
+2. Start the production server:
+   ```bash
+   npm run start
+   ```
 
 ### Backend (Any Python-capable server)
-```bash
-pip install -r requirements.txt
-python manage.py migrate --settings=config.settings
-python manage.py collectstatic --noinput --settings=config.settings
-gunicorn config.wsgi --bind 0.0.0.0:8000
-```
 
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Run migrations:
+   ```bash
+   python manage.py migrate --settings=config.settings
+   ```
+
+3. Collect static files:
+   ```bash
+   python manage.py collectstatic --noinput --settings=config.settings
+   ```
+
+4. Start the server using Gunicorn:
+   ```bash
+   gunicorn config.wsgi --bind 0.0.0.0:8000
+   ```
+   Successfully Dockerized and ready for deployment on platforms like Vercel or Render.
+ 
+  ## Developer Note (Challenges & Approach)
+  I implemented this project using Next.js for the frontend and Django for the backend, ensuring a clean separation of concerns. The project was successfully implemented, Dockerized, and published to this repository.
+
+  ## Challenges Faced:
+  The primary challenge was ensuring the AI consistently returned structured JSON without conversational "noise." Handling edge cases where user input was extremely brief required fine-tuning the prompt to provide constructive feedback rather than failing.
+
+  ## Approach to AI Prompting:
+  I approached prompting by treating the LLM as a data extractor first and a writer second. By providing a strict rubric for the "Clarity Score," I ensured that the results were objective and reproducible, aligning with the requirement for "thinking clarity" over "coding complexity".
 ## Troubleshooting
 
 ### "GOOGLE_API_KEY is not set"
@@ -230,10 +232,6 @@ gunicorn config.wsgi --bind 0.0.0.0:8000
 - Django 4.2 with Django REST Framework
 - Google Generative AI SDK for Gemini integration
 - CORS support for frontend integration
-
-## License
-
-MIT
 
 ## Support
 
