@@ -1,6 +1,6 @@
 # PromptAI
 
-PromptAI is a cutting-edge application designed to analyze and structure project ideas using the power of Google Gemini AI. It provides clarity scores, structured plans, and actionable steps to help you turn your ideas into reality.
+PromptAI is a is a full-stack AI application designed to transform vague, unstructured natural language ideas into clear, actionable project roadmaps. Developed for the KALNET Intern Assignment, the tool bridges the gap between raw ideation and execution by identifying missing elements and providing a quantitative clarity score.
 
 ## Architecture
 
@@ -85,6 +85,13 @@ To run this application, ensure you have the following installed:
 - **Missing Elements**: Identify gaps in your planning.
 - **Simplified Version**: Get a one-sentence summary of your idea.
 - **Actionable Steps**: Receive concrete next actions to take.
+
+## Clarity Score Logic:
+- The score is calculated on a 100-point weighted scale:
+- Goal Clarity (25%): Is a specific, measurable objective present?
+- Defined Steps (25%): Are there at least three logical milestones?
+- Timeline Presence (25%): Is a timeframe or deadline identified?
+- Resource Identification (25%): Are required tools or personnel mentioned? 
 
 ## API Endpoints
 
